@@ -16,19 +16,8 @@ const Answer = sequelize.define('Answer', {
     allowNull: false
   },
   answer: {
-    type: DataTypes.TEXT, // Store as TEXT for SQL Server
-    allowNull: false,
-    get() {
-      const rawValue = this.getDataValue('answer');
-      try {
-        return JSON.parse(rawValue);
-      } catch {
-        return rawValue;
-      }
-    },
-    set(value) {
-      this.setDataValue('answer', JSON.stringify(value));
-    }
+    type: DataTypes.JSONB, // Optimized for Postgres
+    allowNull: false
   }
 }, {
   tableName: 'answers',

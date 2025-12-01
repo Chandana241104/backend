@@ -24,12 +24,12 @@ const Question = sequelize.define('Question', {
     allowNull: false
   },
   options: {
-    type: DataTypes.TEXT, // SQL Server doesn't have JSON type in older versions
-    defaultValue: null
+    type: DataTypes.JSONB, // Optimized for Postgres
+    defaultValue: []
   },
   correct_answers: {
-    type: DataTypes.TEXT,
-    defaultValue: null
+    type: DataTypes.JSONB, // Optimized for Postgres
+    defaultValue: []
   },
   marks: {
     type: DataTypes.INTEGER,

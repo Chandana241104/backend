@@ -2,20 +2,13 @@ const path = require('path');
 require('dotenv').config();
 
 module.exports = {
-  development: {
-    username: process.env.DB_USER || 'innoviii_user',
-    password: process.env.DB_PASSWORD || 'InnoviiiProd123!',
-    database: process.env.DB_NAME || 'innoviii_db',
-    host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT || 1433,
-    dialect: 'mssql',
-    dialectOptions: {
-      options: {
-        encrypt: process.env.DB_ENCRYPT === 'true',
-        trustServerCertificate: true,
-        instanceName: 'SQLEXPRESS'
-      }
-    },
+    development: {
+    username: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    host: process.env.DB_HOST,
+    dialect: 'postgres',
+  },
     logging: console.log,
     pool: {
       max: 10,
@@ -39,17 +32,14 @@ module.exports = {
     },
     logging: false
   },
-  production: {
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    dialect: 'mssql',
+ production: {
+    // Use the full DATABASE_URL from Render
+    use_env_variable: 'DATABASE_URL',
+    dialect: 'postgres',
     dialectOptions: {
-      options: {
-        encrypt: process.env.DB_ENCRYPT === 'true',
-        trustServerCertificate: true
+      ssl: {
+        require: true, // REQUIRED for Render
+        rejectUnauthorized: false // REQUIRED for Render
       }
     },
     logging: false,

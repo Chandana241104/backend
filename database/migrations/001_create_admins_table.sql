@@ -1,0 +1,2 @@
+-- 001_create_admins_table.sql placeholder
+-- Create admins table

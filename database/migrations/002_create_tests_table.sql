@@ -1,0 +1,2 @@
+-- 002_create_tests_table.sql placeholder
+-- Create tests table

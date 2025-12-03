@@ -66,7 +66,7 @@ const startServer = async () => {
     // Sync models (Update associations)
     // NOTE: alter: true updates tables without deleting data. 
     // Use force: true only if you want to wipe data and reset.
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'production') {
       await sequelize.sync({ alter: true }); 
       console.log('✅ Database models synced');
     }

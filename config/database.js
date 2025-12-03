@@ -7,10 +7,18 @@ const sequelize = new Sequelize(
   process.env.DB_PASSWORD,
   {
     host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    dialect: 'postgres', // Must be 'postgres'
+    port: process.env.DB_PORT || 5432, // Good practice to have a default
+    dialect: 'postgres',
     logging: false,
-    pool: { max: 10, min: 2, acquire: 30000, idle: 10000 }
+    pool: { max: 10, min: 2, acquire: 30000, idle: 10000 },
+    
+    // 👇 THIS IS THE MISSING PART REQUIRED FOR RENDER 👇
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false 
+      }
+    }
   }
 );
 

@@ -70,24 +70,6 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// ------------------------------------------------
-// 🛠️ SPECIAL SEED ROUTE (Placed AT THE TOP)
-// ------------------------------------------------
-app.get('/seed-db', async (req, res) => {
-  try {
-    console.log('🔄 Starting Database Seed...');
-    
-    // 1. Force Reset Database
-    await sequelize.sync({ force: true });
-    
-    // 2. Create Admin
-    await Admin.create({
-      name: 'Admin User',
-      email: 'admin14@gmail.com',
-      password_hash: 'Innoviii@2025', 
-      role: 'admin'
-    });
-
     // 3. Create Member Test
     const memberTest = await Test.create({
       title: 'Member Behavioral Test',

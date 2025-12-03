@@ -8,7 +8,7 @@ require('dotenv').config();
 const { sequelize, Admin, Test, Question } = require('./models');
 const routes = require('./routes');
 
-// --- 📝 EMBEDDED DATA (No separate file needed) ---
+// --- 📝 EMBEDDED DATA (So you don't need extra files) ---
 const memberQuestions = [
   { "question_id": "q1", "type": "short", "text": "Imagine you are given a task with no clear instructions. What would you do first?", "marks": 4 },
   { "question_id": "q2", "type": "short", "text": "When you get stuck, do you usually ask for help, search online, or try until you solve it?", "marks": 4 },
@@ -52,7 +52,6 @@ const mentorQuestions = [
   { "question_id": "q25", "type": "short", "text": "Tell me about a time you failed at something. What did you learn from the experience?", "marks": 4 },
   { "question_id": "q26", "type": "short", "text": "Give an example of a time you received constructive criticism. How did you react, and what changes did you make?", "marks": 4 }
 ];
-// -----------------------------------------------------
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -71,15 +70,14 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// Routes
-app.use('/api', routes);
-
-// --- 🛠️ SPECIAL SETUP ROUTE (Run this once) ---
+// ------------------------------------------------
+// 🛠️ SPECIAL SEED ROUTE (Placed AT THE TOP)
+// ------------------------------------------------
 app.get('/seed-db', async (req, res) => {
   try {
     console.log('🔄 Starting Database Seed...');
     
-    // 1. Force Reset Database (Drops all tables and recreates them)
+    // 1. Force Reset Database
     await sequelize.sync({ force: true });
     
     // 2. Create Admin
@@ -99,7 +97,7 @@ app.get('/seed-db', async (req, res) => {
       published: true
     });
 
-    // 4. Add Member Questions (Using embedded data)
+    // 4. Add Member Questions
     for (const q of memberQuestions) {
       await Question.create({ ...q, test_id: memberTest.id });
     }
@@ -113,7 +111,7 @@ app.get('/seed-db', async (req, res) => {
       published: true
     });
 
-    // 6. Add Mentor Questions (Using embedded data)
+    // 6. Add Mentor Questions
     for (const q of mentorQuestions) {
       await Question.create({ ...q, test_id: mentorTest.id });
     }
@@ -130,6 +128,10 @@ app.get('/seed-db', async (req, res) => {
     res.status(500).send(`<h1>❌ Error Seeding Database</h1><pre>${error.message}</pre>`);
   }
 });
+// ------------------------------------------------
+
+// Normal API Routes
+app.use('/api', routes);
 
 // Health check
 app.get('/health', (req, res) => {
@@ -149,7 +151,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-// 404 handler
+// 404 handler (MUST BE LAST)
 app.use('*', (req, res) => {
   res.status(404).json({ 
     success: false, 
